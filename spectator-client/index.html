@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gRPC Node.js UI with CRUD and Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input, button {
+            margin: 5px 0;
+            padding: 10px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+<h1>gRPC Node.js UI</h1>
+<h2>Login</h2>
+<form id="loginForm">
+    <label for="username">Username:</label><br>
+    <input type="text" id="username" name="username" required><br>
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password" required><br>
+    <button type="submit">Login</button>
+</form>
+<div id="loginResult" class="result"></div>
+
+<h2>CRUD Operations</h2>
+
+<form id="createSpectatorForm">
+    <h3>Create Spectator</h3>
+    <label for="createId">Spectator ID:</label><br>
+    <input type="text" id="createId" name="id" required><br>
+    <label for="createName">Spectator Name:</label><br>
+    <input type="text" id="createName" name="name" required><br>
+    <button type="submit">Create</button>
+</form>
+
+<form id="readSpectatorForm">
+    <h3>Read Spectator</h3>
+    <label for="readId">Spectator ID:</label><br>
+    <input type="text" id="readId" name="id" required><br>
+    <button type="submit">Read</button>
+</form>
+
+<form id="updateSpectatorForm">
+    <h3>Update Spectator</h3>
+    <label for="updateId">Spectator ID:</label><br>
+    <input type="text" id="updateId" name="id" required><br>
+    <label for="updateName">New Name:</label><br>
+    <input type="text" id="updateName" name="name" required><br>
+    <button type="submit">Update</button>
+</form>
+
+<form id="deleteSpectatorForm">
+    <h3>Delete Spectator</h3>
+    <label for="deleteId">Spectator ID:</label><br>
+    <input type="text" id="deleteId" name="id" required><br>
+    <button type="submit">Delete</button>
+</form>
+
+<div id="crudResult" class="result"></div>
+
+<script>
+        async function postData(url = '', data = {}) {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            return response.json();
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const result = await postData('/login', { username, password });
+            document.getElementById('loginResult').innerText = JSON.stringify(result, null, 2);
+        });
+
+        document.getElementById('createSpectatorForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('createId').value;
+            const name = document.getElementById('createName').value;
+
+            const result = await postData('/createSpectator', { id, name });
+            document.getElementById('crudResult').innerText = JSON.stringify(result, null, 2);
+        });
+
+        document.getElementById('readSpectatorForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('readId').value;
+
+            const result = await postData('/getSpectatorById', { id });
+            document.getElementById('crudResult').innerText = JSON.stringify(result, null, 2);
+        });
+
+        document.getElementById('updateSpectatorForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('updateId').value;
+            const name = document.getElementById('updateName').value;
+
+            const result = await postData('/updateSpectator', { id, name });
+            document.getElementById('crudResult').innerText = JSON.stringify(result, null, 2);
+        });
+
+        document.getElementById('deleteSpectatorForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('deleteId').value;
+
+            const result = await postData('/deleteSpectator', { id });
+            document.getElementById('crudResult').innerText = JSON.stringify(result, null, 2);
+        });
+    </script>
+</body>
+</html>

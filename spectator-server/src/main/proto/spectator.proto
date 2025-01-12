@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package spectator;
+
+service SpectatorService {
+  rpc GetSpectatorById (SpectatorRequest) returns (SpectatorResponse);
+  rpc CreateMatch (MatchRequest) returns (MatchResponse);
+}
+
+message SpectatorRequest {
+  int32 id = 1;
+}
+
+message SpectatorResponse {
+  int32 id = 1;
+  string sname = 2;
+  bool male = 3;
+  bool haspass = 4;
+}
+
+message MatchRequest {
+  int32 id = 1;
+  string mdate = 2;
+  string startsat = 3;
+  double ticketprice = 4;
+  string mtype = 5;
+}
+
+message MatchResponse {
+  int32 id = 1;
+  string mdate = 2;
+  string startsat = 3;
+  double ticketprice = 4;
+  string mtype = 5;
+}
